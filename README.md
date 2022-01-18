@@ -272,4 +272,4 @@ npm install
 npm run serve
 ```
 
-然后在浏览器打开localhost即可。
+然后在浏览器打开localhost即可

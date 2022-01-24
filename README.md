@@ -273,3 +273,18 @@ npm run serve
 ```
 
 然后在浏览器打开localhost即可
+
+1.24 update：
+
+新上传的idd-front-end文件夹是与模板整合过后的前端。[点击跳转参考的模板](https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/#功能)
+
+如果在使用过程中使用命令
+
+```
+npm install
+```
+
+有问题的话，请使用yarn命令。参考：[yarn的安装和使用 CSDN博客](https://blog.csdn.net/yw00yw/article/details/81354533)
+
+然后把npm替换成yarn，即可运行。
+

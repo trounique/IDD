@@ -6,6 +6,5 @@ module.exports = {
   runtimeCompiler: undefined,
   productionSourceMap: undefined,
   parallel: false,
-  css: undefined,
-  devServer: {    port: 8081  }
+  css: undefined
 }

@@ -11,7 +11,7 @@
       :center="true"
     >
       <el-progress :percentage="percentage"></el-progress>
-      <span slot="footer" class="dialog-footer">请耐心等待约3秒钟</span>
+      <span slot="footer" class="dialog-footer">正在生成...</span>
     </el-dialog>
 
     <div id="CT">

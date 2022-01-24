@@ -274,7 +274,7 @@ npm run serve
 
 然后在浏览器打开localhost即可
 
-1.24 update：
+### 1.24 update：
 
 新上传的idd-front-end文件夹是与模板整合过后的前端。[点击跳转参考的模板](https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/#功能)
 

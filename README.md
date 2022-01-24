@@ -288,3 +288,5 @@ npm install
 
 然后把npm替换成yarn，即可运行。
 
+PS：如果在安装依赖包后还报错，并且报错内容是关于core-js的，请将[zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)这个包下载一下，然后把core-js-master\packages下的core-js文件夹拷贝至项目文件夹中的node_modules文件夹里（提示覆盖选是）即可。
+

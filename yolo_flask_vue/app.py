@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 werkzeug_logger = rel_log.getLogger('werkzeug')
 werkzeug_logger.setLevel(rel_log.ERROR)
 
-# 解决缓存刷新问题
+# 解决缓存刷新问题.
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=1)
 
 

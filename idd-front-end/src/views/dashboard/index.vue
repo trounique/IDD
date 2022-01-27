@@ -117,7 +117,7 @@
                 :data="feature_list"
                 height="390"
                 border
-                style="width: 750px; text-align: center"
+                style="width: 758px; text-align: center"
                 v-loading="loading"
                 element-loading-text="数据正在处理中，请耐心等待"
                 element-loading-spinner="el-icon-loading"
@@ -139,6 +139,15 @@
                   </template>
                 </el-table-column>
               </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="统计信息" 
+              name="second" 
+              height="390"
+              :data="feature_list"
+              border
+              style="width: 758px; text-align: center"
+            >
+              
             </el-tab-pane>
           </el-tabs>
         </el-card>

@@ -1,19 +1,26 @@
-import datetime
+from datetime import date
 import logging as rel_log
 import os
 import shutil
 from datetime import timedelta
 from flask import *
 from processor.AIDetector_pytorch import Detector
-
+from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 import core.main
+from core.process import *
 
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = r'./uploads'
-
-ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 app = Flask(__name__)
+app.config.from_object('config')
 app.secret_key = 'secret!'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+db = SQLAlchemy(app)
+bootstrap = Bootstrap(app)
+
+ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 werkzeug_logger = rel_log.getLogger('werkzeug')
 werkzeug_logger.setLevel(rel_log.ERROR)
@@ -44,7 +51,8 @@ def hello_world():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     file = request.files['file']
-    print(datetime.datetime.now(), file.filename)
+    print(datetime.now(), file.filename)
+    dt = datetime.now()
     if file and allowed_file(file.filename):
         src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(src_path)
@@ -52,6 +60,9 @@ def upload_file():
         image_path = os.path.join('./tmp/ct', file.filename)
         pid, image_info = core.main.c_main(
             image_path, current_app.model, file.filename.rsplit('.', 1)[1])
+        dt_strf = dt.strftime("%Y-%m-%d %H:%m:%S")
+        list_data = [pid, dt_strf]
+        result_add_file(list_data)
         return jsonify({'status': 1,
                         'image_url': 'http://127.0.0.1:5003/tmp/ct/' + pid,
                         'draw_url': 'http://127.0.0.1:5003/tmp/draw/' + pid,

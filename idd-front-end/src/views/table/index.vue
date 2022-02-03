@@ -14,9 +14,10 @@
         </template>
       </el-table-column>
       <el-table-column label="Title">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           {{ scope.row.title }}
-        </template>
+        </template> -->
+       <span> origin11.jpg</span>
       </el-table-column>
       <el-table-column label="Author" width="110" align="center">
         <template slot-scope="scope">
@@ -34,12 +35,28 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.display_time }}</span>
-        </template>
+        </template> -->
+        <span>2022-01-27 18:01:50</span>
       </el-table-column>
     </el-table>
+    
+    
+    
+    
+    
+    <!-- <el-table :data="list" style="width: 100%">
+			<div v-for="items in tableForm" :key="items.id">
+				<el-table-column :label="items.label" :prop="items.prop">
+				</el-table-column>
+			</div>
+			</el-table> -->
+
+
+
+
   </div>
 </template>
 
@@ -59,13 +76,28 @@ export default {
   },
   data() {
     return {
-      list: null,
+      tableForm: [{
+					label: 'ID',
+					prop: "id",
+				}, {
+					label: '日期',
+					prop: "date",
+				}, {
+					label: '名字',
+					prop: "name",
+				} ],
+      list: [],
       listLoading: true
     }
   },
   created() {
     this.fetchData()
   },
+  // mounted() {
+	// 		this.$axios.get("api/api/query/all").then(res => {
+	// 			this.list = res.data.list
+	// 		})
+	// 	},
   methods: {
     fetchData() {
       this.listLoading = true

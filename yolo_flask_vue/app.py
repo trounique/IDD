@@ -10,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 import core.main
 from core.process import *
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = r'./uploads'
 app = Flask(__name__)
@@ -48,6 +47,16 @@ def hello_world():
     return redirect(url_for('static', filename='./index.html'))
 
 
+@app.route("/api/query/all", methods=["GET"])
+def query_all():
+    res_list = result_query_history()
+    data_array = []
+    for i in range(len(res_list)):
+        data_obj = {"id": res_list[i][0], "date": res_list[i][1], "name": res_list[i][2]}
+        data_array.append(data_obj)
+    return jsonify(msg="success", infor="获取成功", list=data_array)
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     file = request.files['file']
@@ -63,6 +72,7 @@ def upload_file():
         dt_strf = dt.strftime("%Y-%m-%d %H:%m:%S")
         list_data = [pid, dt_strf]
         result_add_file(list_data)
+        print('add')
         return jsonify({'status': 1,
                         'image_url': 'http://127.0.0.1:5003/tmp/ct/' + pid,
                         'draw_url': 'http://127.0.0.1:5003/tmp/draw/' + pid,

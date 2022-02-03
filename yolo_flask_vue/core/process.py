@@ -31,3 +31,14 @@ def result_add_file(list_data):
     new_results = Result(id=id, name=name, date=date)
     db.session.add(new_results)
     db.session.commit()
+
+
+def result_query_history():
+    results = Result.query.all()
+    table_list = []
+    for things in results:
+        list_thing = [things.id, things.date, things.name]
+        table_list.append(list_thing)
+    print(table_list)
+    print('1')
+    return table_list

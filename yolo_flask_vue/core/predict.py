@@ -9,7 +9,6 @@ def predict(dataset, model, ext):
     # x = dataset[0]
     file_name = dataset[1]
     print(x)
-    print(file_name)
     x = cv2.imread(x)
     # x = Image.open(x).convert('RGB')
     # x = np.array(x)

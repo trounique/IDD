@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 import core.main
 from core.process import *
+import time
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = r'./uploads'
@@ -68,7 +69,6 @@ def query_all():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     file = request.files['file']
-    print(datetime.now(), file.filename)
     dt = datetime.now()
     if file and allowed_file(file.filename):
         src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -77,8 +77,8 @@ def upload_file():
         image_path = os.path.join('./tmp/ct', file.filename)
         pid, image_info = core.main.c_main(
             image_path, current_app.model, file.filename.rsplit('.', 1)[1])
-        dt_strf = dt.strftime("%Y-%m-%d %H:%m:%S")
-        # print(image_info)
+        # dt_strf = dt.strftime("%Y-%m-%d")
+        dt_strf = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())
         image_keys = list(image_info.keys())
         mainboard_good = 0
         mainboard_lack = 0

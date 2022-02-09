@@ -4,6 +4,7 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
+      id="exportTab"
       border
       fit
       highlight-current-row
@@ -14,6 +15,7 @@
           :label="info.label"
           align="center" 
           width="135"
+          height="50"
           v-if="index != 0"
          >
          <template slot-scope="scope">
@@ -62,13 +64,15 @@
 
 
 
-
+  <el-button type="primary" style="background-color: #0086b3" @click="exportExcel">导出</el-button>
   </div>
+  
 </template>
 
 <script>
 // import { getList } from '@/api/table'
-
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   filters: {
     statusFilter(status) {
@@ -129,7 +133,7 @@ export default {
   // mounted() {
     
 	// 	},
-  // methods: {
+  methods: {
   //   fetchData() {
   //     this.listLoading = true
   //     getList().then(response => {
@@ -137,6 +141,17 @@ export default {
   //       this.listLoading = false
   //     })
   //   }
-  // }
+  exportExcel () {
+	/* generate workbook object from table */
+	 //表名
+	 var wb = XLSX.utils.table_to_book(document.querySelector('#exportTab'))
+	 /* get binary string as output */
+	 var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+	 try {
+	   FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '分析表.xlsx')
+	 } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+	 return wbout
+},
+  }
 }
 </script>

@@ -54,6 +54,4 @@ def result_query_history():
         list_thing = [things.id, things.date, things.name, things.mainboard_good, things.mainboard_lack,
                       things.interface_good, things.interface_lack, things.fan_good, things.fan_lack]
         table_list.append(list_thing)
-    print(table_list)
-    print('1')
     return table_list

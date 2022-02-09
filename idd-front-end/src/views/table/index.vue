@@ -8,39 +8,45 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="95">
+    <div v-for="(info,index) in tableForm" :key="index">
+        <el-table-column
+          :property="info.prop"
+          :label="info.label"
+          align="center" 
+          width="135"
+          v-if="index != 0"
+         >
+         <template slot-scope="scope">
+            {{scope.row[scope.column.property]}} 
+         </template>
+        </el-table-column>
+
+        <el-table-column 
+          :label="info.label" 
+          v-if="index == 0" 
+          :property="info.prop"
+          width="70">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          <el-image :src="scope.row[info.prop]"
+          :preview-src-list="[scope.row[info.prop]]" 
+          width="40" height="40" align="center" />
         </template>
-      </el-table-column>
-      <el-table-column label="Title">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template> -->
-       <span> origin11.jpg</span>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <!-- <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template> -->
-        <span>2022-01-27 18:01:50</span>
-      </el-table-column>
+          </el-table-column>
+
+    </div>
+    <!-- <el-table-column
+          v-for="(info,index) in tableForm"
+          :key="index"
+          :property="info.prop"
+          :label="info.label"
+          align="center" 
+          width="140"
+         >
+         <template slot-scope="scope">
+                   {{scope.row[scope.column.property]}}  
+              </template>
+    </el-table-column> -->
+
     </el-table>
     
     
@@ -61,7 +67,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+// import { getList } from '@/api/table'
 
 export default {
   filters: {
@@ -77,6 +83,9 @@ export default {
   data() {
     return {
       tableForm: [{
+					label: '点击查看结果',
+					prop: "draw_url",
+				}, {
 					label: 'ID',
 					prop: "id",
 				}, {
@@ -85,27 +94,49 @@ export default {
 				}, {
 					label: '名字',
 					prop: "name",
-				} ],
+				} , {
+					label: '主板螺丝完好数目',
+					prop: "mainboard_good",
+				}, {
+					label: '主板螺丝缺失数目',
+					prop: "mainboard_lack",
+				}, {
+					label: '风扇螺丝完好数目',
+					prop: "fan_good",
+				}, {
+					label: '风扇螺丝缺失数目',
+					prop: "fan_lack",
+				}, {
+					label: '接口正确接上数目',
+					prop: "interface_good",
+				}, {
+					label: '接口没有接上数目',
+					prop: "interface_lack",
+				}],
       list: [],
+      srcList: [],
       listLoading: true
     }
   },
   created() {
-    this.fetchData()
+    this.listLoading = false
+    const url = "http://127.0.0.1:5003/api/query/all"
+			this.$axios.get(url).then(res => {
+				this.list = res.data.list
+        this.srcList = res.data.srcList;
+			})
   },
   // mounted() {
-	// 		this.$axios.get("api/api/query/all").then(res => {
-	// 			this.list = res.data.list
-	// 		})
+    
 	// 	},
-  methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
-    }
-  }
+  // methods: {
+  //   fetchData() {
+  //     this.listLoading = true
+  //     getList().then(response => {
+  //       this.list = response.data.items
+  //       this.listLoading = false
+  //     })
+  //   }
+  // }
 }
 </script>

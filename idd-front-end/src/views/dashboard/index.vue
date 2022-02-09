@@ -148,6 +148,31 @@
               style="width: 758px; text-align: center"
             >
               
+
+              <el-table
+                :data="num_list"
+                height="390"
+                border
+                style="width: 758px; text-align: center"
+                v-loading="loading"
+                element-loading-text="数据正在处理中，请耐心等待"
+                element-loading-spinner="el-icon-loading"
+                lazy
+              >
+                <el-table-column label="目标类别" width="375px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="数目" width="375px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.num }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+
+
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -181,6 +206,7 @@ export default {
       feature_list: [],
       feature_list_1: [],
       feat_list: [],
+      num_list: [],
       url: "",
       visible: false,
       wait_return: "等待上传",
@@ -260,7 +286,8 @@ export default {
           this.loading = false;
 
           this.feat_list = Object.keys(response.data.image_info);
-
+          this.num_list = response.data.num_list
+          
           for (var i = 0; i < this.feat_list.length; i++) {
             response.data.image_info[this.feat_list[i]][2] = this.feat_list[i];
             this.feature_list.push(response.data.image_info[this.feat_list[i]]);

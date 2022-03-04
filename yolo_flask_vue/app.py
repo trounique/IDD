@@ -57,19 +57,56 @@ def query_all():
         tmp_list = ['http://127.0.0.1:5003/tmp/draw/' + res_list[i][2]]
         srcList.append(tmp_list)
         data_obj = {"id": res_list[i][0], "date": res_list[i][1], "name": res_list[i][2],
-                    "mainboard_good": res_list[i][3], "mainboard_lack": res_list[i][4],
-                    "fan_good": res_list[i][5], "fan_lack": res_list[i][6],
-                    "interface_good": res_list[i][7], "interface_lack": res_list[i][8],
+                    "mainboard_good": res_list[i][3], "interface_good": res_list[i][4],
+                    "mainboard_lack": res_list[i][5], "interface_lack": res_list[i][6],
+                    "fan_good": res_list[i][7], "fan_lack": res_list[i][8],
                     "draw_url": 'http://127.0.0.1:5003/tmp/draw/' + res_list[i][2],
                     }
         data_array.append(data_obj)
     return jsonify(msg="success", infor="获取成功", list=data_array, srcList=srcList)
 
 
+@app.route("/api/pie_chart", methods=['GET', 'POST'])
+def pie_chart():
+    res_list = result_query_history()
+    mainboard_lack = 0
+    fan_lack = 0
+    interface_lack = 0
+    for i in range(len(res_list)):
+        mainboard_lack = mainboard_lack + int(res_list[i][5])
+        interface_lack = interface_lack + int(res_list[i][6])
+        fan_lack = fan_lack + int(res_list[i][8])
+    lack_data = [{"value": mainboard_lack, "name": "主板螺丝缺失"}, {"value": fan_lack, "name": "风扇螺丝缺失"},
+                 {"value": interface_lack, "name": "接口未接上"}]
+    return jsonify(msg="success", infor="获取成功", lack_data=lack_data)
+
+
+@app.route("/api/bar_chart", methods=['GET', 'POST'])
+def bar_chart():
+    list_data = result_query_bar_chart_history()
+    mainboard_lack_data = list_data[0]
+    fan_lack_data = list_data[1]
+    interface_lack_data = list_data[2]
+    xAxis_data = list_data[3]
+    return jsonify(msg="success", infor="获取成功", mainboard_lack_data=mainboard_lack_data, fan_lack_data=fan_lack_data,
+                   interface_lack_data=interface_lack_data, xAxis_data=xAxis_data)
+
+
+@app.route("/api/line_chart", methods=['GET', 'POST'])
+def line_chart():
+    list_data = result_query_line_chart_history()
+    mainboard_lack_data = list_data[0]
+    fan_lack_data = list_data[1]
+    interface_lack_data = list_data[2]
+    xAxis_data = list_data[3]
+    return jsonify(msg="success", infor="获取成功", mainboard_lack_data=mainboard_lack_data, fan_lack_data=fan_lack_data,
+                   interface_lack_data=interface_lack_data, xAxis_data=xAxis_data)
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     file = request.files['file']
-    dt = datetime.now()
+    # dt = datetime.datetime.now()
     if file and allowed_file(file.filename):
         src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(src_path)
@@ -79,6 +116,7 @@ def upload_file():
             image_path, current_app.model, file.filename.rsplit('.', 1)[1])
         # dt_strf = dt.strftime("%Y-%m-%d")
         dt_strf = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())
+        dt_strf_check = time.strftime("%Y-%m-%d", time.localtime())
         image_keys = list(image_info.keys())
         mainboard_good = 0
         mainboard_lack = 0
@@ -99,7 +137,8 @@ def upload_file():
                 interface_good = interface_good + 1
             if name[:14] == 'interface_lack':
                 interface_lack = interface_lack + 1
-        list_data = [pid, dt_strf, mainboard_good, mainboard_lack, fan_good, fan_lack, interface_good, interface_lack]
+        list_data = [pid, dt_strf, mainboard_good, mainboard_lack, fan_good, fan_lack, interface_good, interface_lack,
+                     dt_strf_check]
         result_add_file(list_data)
         num_list = []
         list_name = ['主板螺丝完好数目', '主板螺丝缺失数目', '风扇螺丝完好数目', '风扇螺丝缺失数目', '接口正确接上数目', '接口没有接上数目']

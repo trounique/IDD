@@ -27,13 +27,44 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      mainboard_lack_data:[],
+      fan_lack_data:[],
+      interface_lack_data:[],
+      xAixs_data:[]
     }
   },
+watch: {
+      mainboard_lack_data(val) {
+        this.mainboard_lack_data = val
+        this.initChart();
+      },
+      // fan_lack_data(val) {
+      //   this.fan_lack_data = val
+      //   this.initChart();
+      // },
+      // interface_lack_data(val) {
+      //   this.interface_lack_data = val
+      //   this.initChart();
+      // },
+      // xAxis_data(val) {
+      //   this.xAxis_data_lack_data = val
+      //   this.initChart();
+      // },
+    },
+
   mounted() {
+    const url = "http://127.0.0.1:5003/api/bar_chart"
+			this.$axios.get(url).then(res => {
+        this.mainboard_lack_data = res.data.mainboard_lack_data
+        this.fan_lack_data = res.data.fan_lack_data
+        this.interface_lack_data = res.data.interface_lack_data
+        this.xAxis_data = res.data.xAxis_data
+			})
     this.$nextTick(() => {
       this.initChart()
     })
+    
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -62,7 +93,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.xAxis_data,
           axisTick: {
             alignWithLabel: true
           }
@@ -74,25 +105,25 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '主板螺丝缺失',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: this.mainboard_lack_data,
           animationDuration
         }, {
-          name: 'pageB',
+          name: '风扇螺丝缺失',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: this.fan_lack_data,
           animationDuration
         }, {
-          name: 'pageC',
+          name: '接口未接上',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: this.interface_lack_data,
           animationDuration
         }]
       })

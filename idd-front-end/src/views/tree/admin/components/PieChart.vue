@@ -25,14 +25,28 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      lack_data:[]
     }
   },
+watch: {
+      lack_data(val) {
+        this.lack_data = val
+        this.initChart();
+      },
+    },
+
   mounted() {
+    const url = "http://127.0.0.1:5003/api/pie_chart"
+			this.$axios.get(url).then(res => {
+        this.lack_data = res.data.lack_data
+			})
     this.$nextTick(() => {
       this.initChart()
     })
+    
   },
+
   beforeDestroy() {
     if (!this.chart) {
       return
@@ -52,22 +66,16 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['主板螺丝缺失', '接口未接上', '风扇螺丝缺失']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '不合格原因',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.lack_data,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

@@ -107,7 +107,7 @@ def result_query_bar_chart_history():
     mainboard_lack_data = []
     fan_lack_data = []
     interface_lack_data = []
-    for i in range(1, 7):
+    for i in range(1, 30):
         dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
         # delta = datetime.timedelta(days=i)
         # now = datetime.datetime.now()
@@ -116,10 +116,10 @@ def result_query_bar_chart_history():
         # dt_strf = time.strftime("%Y-%m-%d", dt_time)
         dt_seven_day.append(dt_strf)
     xAxis_data = dt_seven_day
-    for i in range(1, 7):
+    for i in range(1, 30):
         result_last = Result.query.filter_by(date_check=xAxis_data[i]).all()
         result_data.append(result_last)
-    for i in range(0, 7):
+    for i in range(0, 30):
         mainboard_lack_count = 0
         fan_lack_count = 0
         interface_lack_count = 0
@@ -136,8 +136,11 @@ def result_query_bar_chart_history():
 
 def result_query_line_chart_history():
     dt_30_day = []
+    dt_30_day_xAxis_data = []
     dt_strf_now = time.strftime("%Y-%m-%d", time.localtime())
     dt_30_day.append(dt_strf_now)
+    dt_strf_now_xAxis_data = time.strftime("%m-%d", time.localtime())
+    dt_30_day_xAxis_data.append(dt_strf_now_xAxis_data)
     result_data = []
     result_today = Result.query.filter_by(date_check=dt_strf_now).all()
     result_data.append(result_today)
@@ -146,15 +149,17 @@ def result_query_line_chart_history():
     interface_lack_data = []
     for i in range(1, 30):
         dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
+        dt_strf_xAxis_data = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%m-%d")
+        dt_30_day_xAxis_data.append(dt_strf_xAxis_data)
         # delta = datetime.timedelta(days=i)
         # now = datetime.datetime.now()
         # dt = now - delta
         # dt_time = time.mktime(dt.timetuple())
         # dt_strf = time.strftime("%Y-%m-%d", dt_time)
         dt_30_day.append(dt_strf)
-    xAxis_data = dt_30_day
+    xAxis_data = dt_30_day_xAxis_data
     for i in range(1, 30):
-        result_last = Result.query.filter_by(date_check=xAxis_data[i]).all()
+        result_last = Result.query.filter_by(date_check=dt_30_day[i]).all()
         result_data.append(result_last)
     for i in range(0, 30):
         mainboard_lack_count = 0

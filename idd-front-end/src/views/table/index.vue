@@ -27,11 +27,11 @@
           :label="info.label" 
           v-if="index == 0" 
           :property="info.prop"
-          width="70">
+          width="167px">
         <template slot-scope="scope">
           <el-image :src="scope.row[info.prop]"
           :preview-src-list="[scope.row[info.prop]]" 
-          width="40" height="40" align="center" />
+          width="40px" height="40" align="center" />
         </template>
           </el-table-column>
 
@@ -116,7 +116,16 @@ export default {
 				}, {
 					label: '接口没有接上数目',
 					prop: "interface_lack",
-				}],
+				},
+        {
+					label: '螺丝松动',
+					prop: "flexible",
+				},
+        {
+					label: '是否合格',
+					prop: "qval",
+				}
+        ],
       list: [],
       srcList: [],
       listLoading: true

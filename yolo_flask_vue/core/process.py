@@ -17,6 +17,8 @@ class Result(db.Model):
     interface_lack = db.Column(db.String(100))
     fan_good = db.Column(db.String(100))
     fan_lack = db.Column(db.String(100))
+    qval = db.Column(db.String(100))
+    flexible = db.Column(db.String(100))
 
     def __repr__(self):
         return '<Result ID=%r>' % self.id
@@ -43,9 +45,11 @@ def result_add_file(list_data):
     interface_good = list_data[6]
     interface_lack = list_data[7]
     dt_strf_check = list_data[8]
+    qval = list_data[9]
+    flexible = list_data[10]
     new_results = Result(id=id, name=name, date=date, mainboard_good=mainboard_good, mainboard_lack=mainboard_lack,
                          fan_good=fan_good, fan_lack=fan_lack, interface_good=interface_good,
-                         interface_lack=interface_lack, date_check=dt_strf_check)
+                         interface_lack=interface_lack, date_check=dt_strf_check, qval=qval, flexible=flexible)
     db.session.add(new_results)
     db.session.commit()
 
@@ -55,7 +59,8 @@ def result_query_history():
     table_list = []
     for things in results:
         list_thing = [things.id, things.date, things.name, things.mainboard_good, things.mainboard_lack,
-                      things.interface_good, things.interface_lack, things.fan_good, things.fan_lack]
+                      things.interface_good, things.interface_lack, things.fan_good, things.fan_lack, things.qval,
+                      things.flexible]
         table_list.append(list_thing)
     return table_list
 
@@ -69,43 +74,7 @@ def result_query_bar_chart_history():
     result_data.append(result_today)
     mainboard_lack_data = []
     fan_lack_data = []
-    interface_lack_data = []
-    for i in range(1, 7):
-        dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
-        # delta = datetime.timedelta(days=i)
-        # now = datetime.datetime.now()
-        # dt = now - delta
-        # dt_time = time.mktime(dt.timetuple())
-        # dt_strf = time.strftime("%Y-%m-%d", dt_time)
-        dt_seven_day.append(dt_strf)
-    xAxis_data = dt_seven_day
-    for i in range(1, 7):
-        result_last = Result.query.filter_by(date_check=xAxis_data[i]).all()
-        result_data.append(result_last)
-    for i in range(0, 7):
-        mainboard_lack_count = 0
-        fan_lack_count = 0
-        interface_lack_count = 0
-        for things in result_data[i]:
-            mainboard_lack_count = mainboard_lack_count + int(things.mainboard_lack)
-            fan_lack_count = fan_lack_count + int(things.fan_lack)
-            interface_lack_count = interface_lack_count + int(things.interface_lack)
-        mainboard_lack_data.append(mainboard_lack_count)
-        fan_lack_data.append(fan_lack_count)
-        interface_lack_data.append(interface_lack_count)
-    list_data = [mainboard_lack_data, fan_lack_data, interface_lack_data, xAxis_data]
-    return list_data
-
-
-def result_query_bar_chart_history():
-    dt_seven_day = []
-    dt_strf_today = time.strftime("%Y-%m-%d", time.localtime())
-    dt_seven_day.append(dt_strf_today)
-    result_data = []
-    result_today = Result.query.filter_by(date_check=dt_strf_today).all()
-    result_data.append(result_today)
-    mainboard_lack_data = []
-    fan_lack_data = []
+    flexible_data = []
     interface_lack_data = []
     for i in range(1, 30):
         dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
@@ -123,14 +92,17 @@ def result_query_bar_chart_history():
         mainboard_lack_count = 0
         fan_lack_count = 0
         interface_lack_count = 0
+        flexible_data_count = 0
         for things in result_data[i]:
             mainboard_lack_count = mainboard_lack_count + int(things.mainboard_lack)
             fan_lack_count = fan_lack_count + int(things.fan_lack)
             interface_lack_count = interface_lack_count + int(things.interface_lack)
+            flexible_data_count = flexible_data_count + int(things.flexible)
         mainboard_lack_data.append(mainboard_lack_count)
         fan_lack_data.append(fan_lack_count)
         interface_lack_data.append(interface_lack_count)
-    list_data = [mainboard_lack_data, fan_lack_data, interface_lack_data, xAxis_data]
+        flexible_data.append(flexible_data_count)
+    list_data = [mainboard_lack_data, fan_lack_data, interface_lack_data, xAxis_data, flexible_data]
     return list_data
 
 
@@ -146,6 +118,7 @@ def result_query_line_chart_history():
     result_data.append(result_today)
     mainboard_lack_data = []
     fan_lack_data = []
+    flexible_data = []
     interface_lack_data = []
     for i in range(1, 30):
         dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
@@ -165,12 +138,45 @@ def result_query_line_chart_history():
         mainboard_lack_count = 0
         fan_lack_count = 0
         interface_lack_count = 0
+        flexible_data_count = 0
         for things in result_data[i]:
             mainboard_lack_count = mainboard_lack_count + int(things.mainboard_lack)
             fan_lack_count = fan_lack_count + int(things.fan_lack)
             interface_lack_count = interface_lack_count + int(things.interface_lack)
+            flexible_data_count = flexible_data_count + int(things.flexible)
         mainboard_lack_data.append(mainboard_lack_count)
         fan_lack_data.append(fan_lack_count)
         interface_lack_data.append(interface_lack_count)
-    list_data = [mainboard_lack_data, fan_lack_data, interface_lack_data, xAxis_data]
+        flexible_data.append(flexible_data_count)
+    list_data = [mainboard_lack_data, fan_lack_data, interface_lack_data, xAxis_data, flexible_data]
+    return list_data
+
+
+def result_query_qval_chart_history():
+    dt_30_day = []
+    dt_30_day_xAxis_data = []
+    dt_strf_now = time.strftime("%Y-%m-%d", time.localtime())
+    dt_30_day.append(dt_strf_now)
+    dt_strf_now_xAxis_data = time.strftime("%m-%d", time.localtime())
+    dt_30_day_xAxis_data.append(dt_strf_now_xAxis_data)
+    result_data = []
+    result_today = Result.query.filter_by(date_check=dt_strf_now).all()
+    result_data.append(result_today)
+    qval_data = []
+    for i in range(1, 30):
+        dt_strf = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
+        dt_strf_xAxis_data = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime("%m-%d")
+        dt_30_day_xAxis_data.append(dt_strf_xAxis_data)
+        dt_30_day.append(dt_strf)
+    xAxis_data = dt_30_day_xAxis_data
+    for i in range(1, 30):
+        result_last = Result.query.filter_by(date_check=dt_30_day[i]).all()
+        result_data.append(result_last)
+    for i in range(0, 30):
+        qval_data_count = 0
+        for things in result_data[i]:
+            if things.qval == "螺丝安装合格":
+                qval_data_count = qval_data_count + 1
+        qval_data.append(qval_data_count)
+    list_data = [xAxis_data, qval_data]
     return list_data

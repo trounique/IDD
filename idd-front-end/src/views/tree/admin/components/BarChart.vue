@@ -31,6 +31,7 @@ export default {
       mainboard_lack_data:[],
       fan_lack_data:[],
       interface_lack_data:[],
+      flexible_data:[],
       xAixs_data:[]
     }
   },
@@ -60,6 +61,7 @@ watch: {
         this.fan_lack_data = res.data.fan_lack_data
         this.interface_lack_data = res.data.interface_lack_data
         this.xAxis_data = res.data.xAxis_data
+        this.flexible_data = res.data.flexible_data
 			})
     this.$nextTick(() => {
       this.initChart()
@@ -149,6 +151,13 @@ watch: {
           stack: 'vistors',
           barWidth: '60%',
           data: this.interface_lack_data,
+          animationDuration
+        },{
+          name: '螺丝松动',
+          type: 'bar',
+          stack: 'vistors',
+          barWidth: '60%',
+          data: this.flexible_data,
           animationDuration
         }]
       })

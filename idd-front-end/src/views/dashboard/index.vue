@@ -89,7 +89,7 @@
       </div>
       <div id="info_patient">
         <!-- 卡片放置表格 -->
-        <el-card style="border-radius: 8px">
+        <el-card style="border-radius: 8px,width:800px">
           <div slot="header" class="clearfix">
             <span>检测目标</span>
             <el-button
@@ -111,7 +111,41 @@
             </el-button>
           </div>
           <el-tabs v-model="activeName">
-            <el-tab-pane label="检测到的目标" name="first">
+              <el-tab-pane label="统计信息" 
+              name="first" 
+              height="390"
+              :data="feature_list"
+              border
+              style="width: 758px; text-align: center"
+            >
+              
+
+              <el-table
+                :data="num_list"
+                height="340px"
+                border
+                style="width: 758px; text-align: center"
+                v-loading="loading"
+                element-loading-text="数据正在处理中，请耐心等待"
+                element-loading-spinner="el-icon-loading"
+                lazy
+              >
+                <el-table-column label="目标类别" width="375px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="数目" width="375px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.num }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+
+
+            </el-tab-pane>
+                        <el-tab-pane label="检测到的目标" name="second">
               <!-- 表格存放特征值 -->
               <el-table
                 :data="feature_list"
@@ -140,43 +174,13 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="统计信息" 
-              name="second" 
-              height="390"
-              :data="feature_list"
-              border
-              style="width: 758px; text-align: center"
-            >
-              
-
-              <el-table
-                :data="num_list"
-                height="390"
-                border
-                style="width: 758px; text-align: center"
-                v-loading="loading"
-                element-loading-text="数据正在处理中，请耐心等待"
-                element-loading-spinner="el-icon-loading"
-                lazy
-              >
-                <el-table-column label="目标类别" width="375px">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.name }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="数目" width="375px">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.num }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-
-
-
-            </el-tab-pane>
           </el-tabs>
         </el-card>
+        
       </div>
+      <el-card class="span-res">
+          <span ><h3 class="h3-res">检测结果：{{qval}}</h3></span>
+        </el-card>
       
     </div>
   </div>
@@ -207,6 +211,7 @@ export default {
       feature_list_1: [],
       feat_list: [],
       num_list: [],
+      qval:'',
       url: "",
       visible: false,
       wait_return: "等待上传",
@@ -284,7 +289,7 @@ export default {
           this.srcList1.push(this.url_2);
           this.fullscreenLoading = false;
           this.loading = false;
-
+          this.qval = response.data.qval;
           this.feat_list = Object.keys(response.data.image_info);
           this.num_list = response.data.num_list
           
@@ -391,7 +396,8 @@ export default {
   width: 680px;
   height: 200px;
   border-radius: 8px;
-  margin-top: -20px;
+  /* margin-top: -20px; */
+  margin: 0 auto;
 }
 
 .divider {
@@ -436,7 +442,7 @@ export default {
   height: 30px;
   width: 275px;
   text-align: center;
-  background-color: #21b3b9;
+  background-color: #409EFF;
   line-height: 30px;
 }
 
@@ -571,5 +577,15 @@ div {
 #info_patient {
   margin-top: 10px;
   margin-right: 160px;
+}
+.span-res{
+  text-align: center;
+  margin: 40px;
+  width: 800px;
+  position: relative;
+  left: -80px;
+}
+.h3-res{
+  color: red;
 }
 </style>

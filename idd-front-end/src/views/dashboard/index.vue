@@ -21,9 +21,11 @@
           class="box-card"
           style="
             border-radius: 8px;
-            width: 800px;
-            height: 360px;
-            margin-bottom: -30px;
+            width: 500px;
+            height: 370px;
+            margin-bottom: 30px;
+            margin-top: 100px;
+            margin-right:110px;
           "
         >
           <div class="demo-image__preview1">
@@ -64,6 +66,15 @@
               <span style="color: white; letter-spacing: 6px">原始图像</span>
             </div>
           </div>
+          
+        </el-card>
+        <el-card
+        style="
+            border-radius: 8px;
+            width: 500px;
+            height: 370px;
+            margin-bottom: 10px;
+          ">
           <div class="demo-image__preview2">
             <div
               v-loading="loading"
@@ -122,7 +133,7 @@
 
               <el-table
                 :data="num_list"
-                height="340px"
+                height="440px"
                 border
                 style="width: 758px; text-align: center"
                 v-loading="loading"
@@ -149,7 +160,7 @@
               <!-- 表格存放特征值 -->
               <el-table
                 :data="feature_list"
-                height="390"
+                height="440px"
                 border
                 style="width: 758px; text-align: center"
                 v-loading="loading"
@@ -408,6 +419,7 @@ export default {
   display: flex;
   height: 100%;
   width: 100%;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
@@ -432,7 +444,7 @@ export default {
 }
 
 .image_1 {
-  width: 275px;
+  width: 350px;
   height: 260px;
   background: #ffffff;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -440,7 +452,7 @@ export default {
 
 .img_info_1 {
   height: 30px;
-  width: 275px;
+  width: 350px;
   text-align: center;
   background-color: #409EFF;
   line-height: 30px;
@@ -457,7 +469,7 @@ export default {
   width: 250px;
   height: 290px;
 
-  margin: 20px 460px;
+  margin: 20px 60px;
   /* background-color: green; */
 }
 
@@ -583,7 +595,7 @@ div {
   margin: 40px;
   width: 800px;
   position: relative;
-  left: -80px;
+  left: -40px;
 }
 .h3-res{
   color: red;

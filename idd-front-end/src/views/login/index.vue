@@ -2,9 +2,9 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
-      <div class="title-container">
-        <h3 class="title">登录</h3>
-      </div>
+      <!-- <div class="title-container">
+        <h4 class="title">IDD主板质量检测系统</h4>
+      </div> -->
 
       <el-form-item prop="username">
         <span class="svg-container">
@@ -180,11 +180,15 @@ $light_gray:#eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  // background-color: $bg;
+  background-image: url(./IDD-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
   overflow: hidden;
 
   .login-form {
     position: relative;
+    top:450px;
     width: 520px;
     max-width: 100%;
     padding: 160px 35px 0;

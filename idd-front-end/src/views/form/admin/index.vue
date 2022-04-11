@@ -15,7 +15,7 @@
           <raddar-chart />
         </div>
       </el-col> -->
-      <el-col :xs="36" :sm="36" :lg="12">
+      <!-- <el-col :xs="36" :sm="36" :lg="12">
         <div class="chart-wrapper">
           <pie-chart />
         </div>
@@ -24,7 +24,7 @@
         <div class="chart-wrapper">
           <bar-chart />
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
